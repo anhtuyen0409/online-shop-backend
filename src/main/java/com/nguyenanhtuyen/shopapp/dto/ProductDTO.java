@@ -1,5 +1,7 @@
 package com.nguyenanhtuyen.shopapp.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.Max;
@@ -31,4 +33,6 @@ public class ProductDTO {
 	
 	@JsonProperty("category_id")
 	private String categoryId;
+	
+	private MultipartFile file;
 }
