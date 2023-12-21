@@ -1,5 +1,7 @@
 package com.nguyenanhtuyen.shopapp.dto;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,5 +36,5 @@ public class ProductDTO {
 	@JsonProperty("category_id")
 	private String categoryId;
 	
-	private MultipartFile file;
+	private List<MultipartFile> files;
 }
