@@ -60,8 +60,8 @@ public class ProductController {
 			files = files == null ? new ArrayList<MultipartFile>() : files;
 
 			for (MultipartFile file : files) {
-				
-				if(file.getSize() == 0) {
+
+				if (file.getSize() == 0) {
 					continue;
 				}
 

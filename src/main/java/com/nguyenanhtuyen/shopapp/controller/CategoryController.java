@@ -31,7 +31,7 @@ public class CategoryController {
 	}
 
 	@PostMapping("")
-	// tham so truyen vao la 1 object => data transfer object (dto) = request object
+	// tham số truyền vào là 1 object => data transfer object (dto) = request object
 	public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryDTO categoryDTO, BindingResult result) {
 		if (result.hasErrors()) {
 			List<String> errorMessages = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
