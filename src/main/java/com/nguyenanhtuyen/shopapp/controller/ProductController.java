@@ -30,7 +30,7 @@ import com.nguyenanhtuyen.shopapp.dto.ProductDTO;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("${api.prefix}/products")
 public class ProductController {
 
 	// http://localhost:8088/api/v1/products?page=1&limit=10
