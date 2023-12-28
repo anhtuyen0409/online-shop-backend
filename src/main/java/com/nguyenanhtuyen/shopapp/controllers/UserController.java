@@ -1,4 +1,4 @@
-package com.nguyenanhtuyen.shopapp.controller;
+package com.nguyenanhtuyen.shopapp.controllers;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nguyenanhtuyen.shopapp.dto.UserDTO;
-import com.nguyenanhtuyen.shopapp.dto.UserLoginDTO;
+import com.nguyenanhtuyen.shopapp.dtos.UserDTO;
+import com.nguyenanhtuyen.shopapp.dtos.UserLoginDTO;
 
 import jakarta.validation.Valid;
 

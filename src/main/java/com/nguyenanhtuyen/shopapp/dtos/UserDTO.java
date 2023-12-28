@@ -1,4 +1,4 @@
-package com.nguyenanhtuyen.shopapp.dto;
+package com.nguyenanhtuyen.shopapp.dtos;
 
 import java.util.Date;
 

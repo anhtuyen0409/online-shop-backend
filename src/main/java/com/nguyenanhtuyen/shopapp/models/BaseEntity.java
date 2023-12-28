@@ -1,4 +1,4 @@
-package com.nguyenanhtuyen.shopapp.model;
+package com.nguyenanhtuyen.shopapp.models;
 
 import java.time.LocalDateTime;
 

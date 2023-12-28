@@ -1,4 +1,4 @@
-package com.nguyenanhtuyen.shopapp.controller;
+package com.nguyenanhtuyen.shopapp.controllers;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nguyenanhtuyen.shopapp.dto.ProductDTO;
+import com.nguyenanhtuyen.shopapp.dtos.ProductDTO;
 
 import jakarta.validation.Valid;
 

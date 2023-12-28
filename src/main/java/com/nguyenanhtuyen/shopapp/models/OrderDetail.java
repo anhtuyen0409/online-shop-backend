@@ -1,4 +1,4 @@
-package com.nguyenanhtuyen.shopapp.model;
+package com.nguyenanhtuyen.shopapp.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
