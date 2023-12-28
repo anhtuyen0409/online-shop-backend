@@ -15,32 +15,32 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "products")
+@Table(name = "social_accounts")
 @Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product extends BaseEntity {
+public class SocialAccount {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", nullable = false, length = 350)
+	@Column(name = "provider", nullable = false, length = 20)
+	private String provider;
+
+	@Column(name = "provider_id", nullable = false, length = 50)
+	private String providerId;
+
+	@Column(name = "email", nullable = false, length = 150)
+	private String email;
+
+	@Column(name = "name", nullable = false, length = 100)
 	private String name;
 
-	@Column(name = "price")
-	private Float price;
-
-	@Column(name = "thumbnail", nullable = false, length = 300)
-	private String thumbnail;
-
-	@Column(name = "description")
-	private String description;
-
 	@ManyToOne
-	@JoinColumn(name = "category_id")
-	private Category category;
+	@JoinColumn(name = "user_id")
+	private User user;
 	
 }
