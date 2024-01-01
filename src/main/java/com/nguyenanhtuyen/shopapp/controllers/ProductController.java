@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,8 @@ import com.nguyenanhtuyen.shopapp.dtos.ProductDTO;
 import com.nguyenanhtuyen.shopapp.dtos.ProductImageDTO;
 import com.nguyenanhtuyen.shopapp.models.Product;
 import com.nguyenanhtuyen.shopapp.models.ProductImage;
+import com.nguyenanhtuyen.shopapp.responses.ProductListResponse;
+import com.nguyenanhtuyen.shopapp.responses.ProductResponse;
 import com.nguyenanhtuyen.shopapp.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -45,8 +50,20 @@ public class ProductController {
 
 	// http://localhost:8088/api/v1/products?page=1&limit=10
 	@GetMapping("")
-	public ResponseEntity<String> getProducts(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-		return ResponseEntity.ok("success");
+	public ResponseEntity<ProductListResponse> getProducts(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+		
+		// tạo Pageable từ thông tin trang và giới hạn
+		PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createAt").descending());
+		Page<ProductResponse> productPage = productService.getAllProducts(pageRequest);
+		
+		// lấy tổng số trang
+		int totalPages = productPage.getTotalPages();
+		List<ProductResponse> products = productPage.getContent();
+		
+		return ResponseEntity.ok(ProductListResponse.builder()
+				.products(products)
+				.totalPages(totalPages)
+				.build());
 	}
 
 	// http://localhost:8088/api/v1/products/1

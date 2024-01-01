@@ -5,9 +5,9 @@ import org.springframework.data.domain.PageRequest;
 
 import com.nguyenanhtuyen.shopapp.dtos.ProductDTO;
 import com.nguyenanhtuyen.shopapp.dtos.ProductImageDTO;
-import com.nguyenanhtuyen.shopapp.exceptions.DataNotFoundException;
 import com.nguyenanhtuyen.shopapp.models.Product;
 import com.nguyenanhtuyen.shopapp.models.ProductImage;
+import com.nguyenanhtuyen.shopapp.responses.ProductResponse;
 
 public interface IProductService {
 
@@ -15,7 +15,7 @@ public interface IProductService {
 	
 	Product getProductById(long id) throws Exception;
 	
-	Page<Product> getAllProducts(PageRequest pageRequest);
+	Page<ProductResponse> getAllProducts(PageRequest pageRequest);
 	
 	Product updateProduct(long id, ProductDTO productDTO) throws Exception;
 	

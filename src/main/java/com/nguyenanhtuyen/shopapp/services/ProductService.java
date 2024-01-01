@@ -16,6 +16,7 @@ import com.nguyenanhtuyen.shopapp.models.ProductImage;
 import com.nguyenanhtuyen.shopapp.repositories.CategoryRepository;
 import com.nguyenanhtuyen.shopapp.repositories.ProductImageRepository;
 import com.nguyenanhtuyen.shopapp.repositories.ProductRepository;
+import com.nguyenanhtuyen.shopapp.responses.ProductResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -54,9 +55,20 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public Page<Product> getAllProducts(PageRequest pageRequest) {
+	public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
 		// lấy danh sách sản phẩm theo trang (page) và giới hạn (limit)
-		return productRepository.findAll(pageRequest);
+		return productRepository.findAll(pageRequest).map(product -> {
+			ProductResponse productResponse = ProductResponse.builder()
+					.name(product.getName())
+					.price(product.getPrice())
+					.thumbnail(product.getThumbnail())
+					.description(product.getDescription())
+					.categoryId(product.getCategory().getId())
+					.build();
+			productResponse.setCreateAt(product.getCreateAt());
+			productResponse.setUpdateAt(product.getUpdateAt());
+			return productResponse;
+		});
 	}
 
 	@Override
