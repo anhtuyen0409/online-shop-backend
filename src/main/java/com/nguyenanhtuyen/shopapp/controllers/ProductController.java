@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,8 +70,13 @@ public class ProductController {
 
 	// http://localhost:8088/api/v1/products/1
 	@GetMapping("/{id}")
-	public ResponseEntity<String> getProductById(@PathVariable("id") String productId) {
-		return ResponseEntity.ok("product with id: " + productId);
+	public ResponseEntity<?> getProductById(@PathVariable("id") Long productId) {
+		try {
+			Product existingProduct = productService.getProductById(productId);
+			return ResponseEntity.ok(ProductResponse.fromProduct(existingProduct)); //trả về ProductResponse
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	// POST http://localhost:8088/api/v1/products
@@ -171,10 +177,25 @@ public class ProductController {
 		String contentType = file.getContentType();
 		return contentType != null && contentType.startsWith("image/");
 	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateProduct(@PathVariable long id, @RequestBody ProductDTO productDTO) {
+		try {
+			Product updateProduct = productService.updateProduct(id, productDTO);
+			return ResponseEntity.ok(ProductResponse.fromProduct(updateProduct)); //trả về ResponseProduct
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteProduct(@PathVariable long id) {
-		return ResponseEntity.status(HttpStatus.OK).body("delete product with id = " + id + " success!");
+		try {
+			productService.deleteProduct(id);
+			return ResponseEntity.ok(String.format("Product with id = %d deleted successfully", id));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
 	// fake data
