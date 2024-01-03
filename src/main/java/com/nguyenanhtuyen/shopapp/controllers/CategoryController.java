@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nguyenanhtuyen.shopapp.dtos.CategoryDTO;
 import com.nguyenanhtuyen.shopapp.models.Category;
-import com.nguyenanhtuyen.shopapp.services.CategoryService;
+import com.nguyenanhtuyen.shopapp.services.ICategoryService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryController {
 	
-	private final CategoryService categoryService; //Dependency Injection
+	private final ICategoryService categoryService; //Dependency Injection
 
 	// http://localhost:8088/api/v1/categories?page=1&limit=10
 	@GetMapping("")

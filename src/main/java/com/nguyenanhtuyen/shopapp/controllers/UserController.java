@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nguyenanhtuyen.shopapp.dtos.UserDTO;
 import com.nguyenanhtuyen.shopapp.dtos.UserLoginDTO;
-import com.nguyenanhtuyen.shopapp.services.UserService;
+import com.nguyenanhtuyen.shopapp.services.IUserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 	
-	private final UserService userService;
+	private final IUserService userService;
 
 	@PostMapping("/register")
 	public ResponseEntity<?> createUsers(@Valid @RequestBody UserDTO userDTO, BindingResult result) {

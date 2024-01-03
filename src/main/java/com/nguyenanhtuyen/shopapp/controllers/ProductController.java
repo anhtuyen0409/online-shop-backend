@@ -38,7 +38,7 @@ import com.nguyenanhtuyen.shopapp.models.Product;
 import com.nguyenanhtuyen.shopapp.models.ProductImage;
 import com.nguyenanhtuyen.shopapp.responses.ProductListResponse;
 import com.nguyenanhtuyen.shopapp.responses.ProductResponse;
-import com.nguyenanhtuyen.shopapp.services.ProductService;
+import com.nguyenanhtuyen.shopapp.services.IProductService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductController {
 	
-	private final ProductService productService;
+	private final IProductService productService;
 
 	// http://localhost:8088/api/v1/products?page=1&limit=10
 	@GetMapping("")
@@ -199,7 +199,7 @@ public class ProductController {
 	}
 	
 	// fake data
-	//@PostMapping("/generateFakeProducts")
+	//@PostMapping("/generateFakeProducts") 
 	private ResponseEntity<String> generateFakeProducts() {
 		Faker faker = new Faker();
 		for(int i=0; i<1_000; i++) {
