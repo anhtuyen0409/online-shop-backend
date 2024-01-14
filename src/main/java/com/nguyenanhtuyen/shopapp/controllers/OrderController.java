@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nguyenanhtuyen.shopapp.components.LocalizationUtil;
 import com.nguyenanhtuyen.shopapp.dtos.OrderDTO;
 import com.nguyenanhtuyen.shopapp.models.Order;
+import com.nguyenanhtuyen.shopapp.responses.OrderMessageResponse;
 import com.nguyenanhtuyen.shopapp.services.IOrderService;
+import com.nguyenanhtuyen.shopapp.utils.MessageKeys;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 public class OrderController {
 
 	private final IOrderService orderService;
+	
+	private final LocalizationUtil localizationUtil;
 	
 	@PostMapping("")
 	public ResponseEntity<?> createOrder(@RequestBody @Valid OrderDTO orderDTO, BindingResult result) {
@@ -77,9 +82,11 @@ public class OrderController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteOrder(@Valid @PathVariable Long id) {
+	public ResponseEntity<OrderMessageResponse> deleteOrder(@Valid @PathVariable Long id) {
 		orderService.deleteOrder(id);
-		return ResponseEntity.ok("delete order successfully!");
+		return ResponseEntity.ok(OrderMessageResponse.builder()
+				.message(localizationUtil.getLocalizedMessage(MessageKeys.DELETE_ORDER_SUCCESSFULLY, id))
+				.build());
 	}
 	
 }

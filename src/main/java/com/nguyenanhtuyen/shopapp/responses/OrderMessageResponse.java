@@ -10,10 +10,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class UpdateCategoryResponse {
+public class OrderMessageResponse {
 
 	@JsonProperty("message")
 	private String message;

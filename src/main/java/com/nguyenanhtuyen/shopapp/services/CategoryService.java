@@ -3,11 +3,12 @@ package com.nguyenanhtuyen.shopapp.services;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import com.nguyenanhtuyen.shopapp.components.LocalizationUtil;
 import com.nguyenanhtuyen.shopapp.dtos.CategoryDTO;
 import com.nguyenanhtuyen.shopapp.models.Category;
 import com.nguyenanhtuyen.shopapp.repositories.CategoryRepository;
+import com.nguyenanhtuyen.shopapp.utils.MessageKeys;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 public class CategoryService implements ICategoryService{
 	
 	private final CategoryRepository categoryRepository; //Dependency Injection
+	
+	private final LocalizationUtil localizationUtil;
 
 	@Override
 	public Category createCategory(CategoryDTO categoryDTO) {
@@ -25,7 +28,7 @@ public class CategoryService implements ICategoryService{
 
 	@Override
 	public Category getCategoryById(long id) {
-		return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found!"));
+		return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(localizationUtil.getLocalizedMessage(MessageKeys.CATEGORY_NOT_FOUND)));
 	}
 
 	@Override

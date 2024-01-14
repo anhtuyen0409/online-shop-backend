@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nguyenanhtuyen.shopapp.components.LocalizationUtil;
 import com.nguyenanhtuyen.shopapp.dtos.CategoryDTO;
 import com.nguyenanhtuyen.shopapp.models.Category;
-import com.nguyenanhtuyen.shopapp.responses.UpdateCategoryResponse;
+import com.nguyenanhtuyen.shopapp.responses.CategoryMessageResponse;
 import com.nguyenanhtuyen.shopapp.services.ICategoryService;
 import com.nguyenanhtuyen.shopapp.utils.MessageKeys;
 
@@ -33,7 +33,7 @@ public class CategoryController {
 	
 	private final ICategoryService categoryService; //Dependency Injection
 	
-	private final LocalizationUtil localizationUtils;
+	private final LocalizationUtil localizationUtil;
 
 	// http://localhost:8088/api/v1/categories?page=1&limit=10
 	@GetMapping("")
@@ -50,21 +50,25 @@ public class CategoryController {
 			return ResponseEntity.badRequest().body(errorMessages);
 		}
 		categoryService.createCategory(categoryDTO);
-		return ResponseEntity.ok("create category successfully!");
+		return ResponseEntity.ok(CategoryMessageResponse.builder()
+				.message(localizationUtil.getLocalizedMessage(MessageKeys.CREATE_CATEGORY_SUCCESSFULLY))
+				.build());
 	}
 
 	// http://localhost:8088/api/v1/categories?id=1
 	@PutMapping("")
-	public ResponseEntity<UpdateCategoryResponse> updateCategory(@RequestParam("id") Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
+	public ResponseEntity<CategoryMessageResponse> updateCategory(@RequestParam("id") Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
 		categoryService.updateCategory(id, categoryDTO);
-		return ResponseEntity.ok(UpdateCategoryResponse.builder()
-				.message(localizationUtils.getLocalizedMessage(MessageKeys.UPDATE_CATEGORY_SUCCESSFULLY))
+		return ResponseEntity.ok(CategoryMessageResponse.builder()
+				.message(localizationUtil.getLocalizedMessage(MessageKeys.UPDATE_CATEGORY_SUCCESSFULLY))
 				.build());
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
+	public ResponseEntity<CategoryMessageResponse> deleteCategory(@PathVariable Long id) {
 		categoryService.deleteCategory(id);
-		return ResponseEntity.ok("delete category successfully!");
+		return ResponseEntity.ok(CategoryMessageResponse.builder()
+				.message(localizationUtil.getLocalizedMessage(MessageKeys.DELETE_CATEGORY_SUCCESSFULLY, id))
+				.build());
 	}
 }

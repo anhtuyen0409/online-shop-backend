@@ -32,13 +32,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.javafaker.Faker;
+import com.nguyenanhtuyen.shopapp.components.LocalizationUtil;
 import com.nguyenanhtuyen.shopapp.dtos.ProductDTO;
 import com.nguyenanhtuyen.shopapp.dtos.ProductImageDTO;
 import com.nguyenanhtuyen.shopapp.models.Product;
 import com.nguyenanhtuyen.shopapp.models.ProductImage;
+import com.nguyenanhtuyen.shopapp.responses.ImageMessageResponse;
 import com.nguyenanhtuyen.shopapp.responses.ProductListResponse;
+import com.nguyenanhtuyen.shopapp.responses.ProductMessageResponse;
 import com.nguyenanhtuyen.shopapp.responses.ProductResponse;
 import com.nguyenanhtuyen.shopapp.services.IProductService;
+import com.nguyenanhtuyen.shopapp.utils.MessageKeys;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +53,8 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
 	
 	private final IProductService productService;
+	
+	private final LocalizationUtil localizationUtil;
 
 	// http://localhost:8088/api/v1/products?page=1&limit=10
 	@GetMapping("")
@@ -104,7 +110,10 @@ public class ProductController {
 			files = files == null ? new ArrayList<MultipartFile>() : files;
 			if(files.size() > ProductImage.MAXIMUM_IMAGES_OF_PRODUCT) {
 				return ResponseEntity.badRequest()
-						.body("You can upload maximum " + ProductImage.MAXIMUM_IMAGES_OF_PRODUCT + " images");
+						.body(ImageMessageResponse
+								.builder()
+								.message(localizationUtil.getLocalizedMessage(MessageKeys.UPLOAD_IMAGES_MAX_5))
+								.build());
 			}
 			List<ProductImage> productImages = new ArrayList<ProductImage>();
 
@@ -117,13 +126,19 @@ public class ProductController {
 				// kiểm tra kích thước file và định dạng
 				if (file.getSize() > 10 * 1024 * 1024) { // kich thuoc > 10MB
 					return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-							.body("File is too large! Maximum size is 10MB.");
+							.body(ImageMessageResponse
+									.builder()
+									.message(localizationUtil.getLocalizedMessage(MessageKeys.UPLOAD_IMAGES_FILE_LARGE))
+									.build());
 				}
 
 				// kiểm tra định dạng file
 				String contentType = file.getContentType();
 				if (contentType == null || !contentType.startsWith("image/")) {
-					return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an image.");
+					return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(ImageMessageResponse
+							.builder()
+							.message(localizationUtil.getLocalizedMessage(MessageKeys.UPLOAD_IMAGES_FILE_MUST_BE_IMAGE))
+							.build());
 				}
 
 				// lưu file và cập nhật thumbnail trong DTO
@@ -189,10 +204,13 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteProduct(@PathVariable long id) {
+	public ResponseEntity<?> deleteProduct(@PathVariable long id) {
 		try {
 			productService.deleteProduct(id);
-			return ResponseEntity.ok(String.format("Product with id = %d deleted successfully", id));
+			// return ResponseEntity.ok(String.format("Product with id = %d deleted successfully", id));
+			return ResponseEntity.ok(ProductMessageResponse.builder()
+					.message(localizationUtil.getLocalizedMessage(MessageKeys.DELETE_PRODUCT_SUCCESSFULLY, id))
+					.build());
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

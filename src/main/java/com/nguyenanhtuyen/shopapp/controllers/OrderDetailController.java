@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nguyenanhtuyen.shopapp.components.LocalizationUtil;
 import com.nguyenanhtuyen.shopapp.dtos.OrderDetailDTO;
 import com.nguyenanhtuyen.shopapp.models.OrderDetail;
+import com.nguyenanhtuyen.shopapp.responses.OrderDetailMessageResponse;
 import com.nguyenanhtuyen.shopapp.responses.OrderDetailResponse;
 import com.nguyenanhtuyen.shopapp.services.IOrderDetailService;
+import com.nguyenanhtuyen.shopapp.utils.MessageKeys;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 public class OrderDetailController {
 
 	private final IOrderDetailService orderDetailService;
+	
+	private final LocalizationUtil localizationUtil;
 	
 	@PostMapping
 	public ResponseEntity<?> createOrderDetail(@Valid @RequestBody OrderDetailDTO orderDetailDTO) {
@@ -71,10 +76,13 @@ public class OrderDetailController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteOrderDetail(@Valid @PathVariable("id") Long id) {
+	public ResponseEntity<?> deleteOrderDetail(@Valid @PathVariable("id") Long id) {
 		try {
 			orderDetailService.deleteOrderDetail(id);
-			return ResponseEntity.ok(String.format("Order detail with id = %d deleted successfully", id));
+			// return ResponseEntity.ok(String.format("Order detail with id = %d deleted successfully", id));
+			return ResponseEntity.ok(OrderDetailMessageResponse.builder()
+					.message(localizationUtil.getLocalizedMessage(MessageKeys.DELETE_ORDER_DETAIL_SUCCESSFULLY, id))
+					.build());
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
