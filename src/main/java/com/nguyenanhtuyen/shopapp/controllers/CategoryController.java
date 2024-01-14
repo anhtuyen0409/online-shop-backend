@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nguyenanhtuyen.shopapp.components.LocalizationUtil;
 import com.nguyenanhtuyen.shopapp.dtos.CategoryDTO;
 import com.nguyenanhtuyen.shopapp.models.Category;
+import com.nguyenanhtuyen.shopapp.responses.UpdateCategoryResponse;
 import com.nguyenanhtuyen.shopapp.services.ICategoryService;
+import com.nguyenanhtuyen.shopapp.utils.MessageKeys;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class CategoryController {
 	
 	private final ICategoryService categoryService; //Dependency Injection
+	
+	private final LocalizationUtil localizationUtils;
 
 	// http://localhost:8088/api/v1/categories?page=1&limit=10
 	@GetMapping("")
@@ -50,9 +55,11 @@ public class CategoryController {
 
 	// http://localhost:8088/api/v1/categories?id=1
 	@PutMapping("")
-	public ResponseEntity<String> updateCategory(@RequestParam("id") Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
+	public ResponseEntity<UpdateCategoryResponse> updateCategory(@RequestParam("id") Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
 		categoryService.updateCategory(id, categoryDTO);
-		return ResponseEntity.ok("update category successfully!");
+		return ResponseEntity.ok(UpdateCategoryResponse.builder()
+				.message(localizationUtils.getLocalizedMessage(MessageKeys.UPDATE_CATEGORY_SUCCESSFULLY))
+				.build());
 	}
 
 	@DeleteMapping("/{id}")

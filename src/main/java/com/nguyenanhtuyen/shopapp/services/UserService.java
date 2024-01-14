@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.nguyenanhtuyen.shopapp.components.JwtTokenUtil;
+import com.nguyenanhtuyen.shopapp.components.LocalizationUtil;
 import com.nguyenanhtuyen.shopapp.dtos.UserDTO;
 import com.nguyenanhtuyen.shopapp.exceptions.DataNotFoundException;
 import com.nguyenanhtuyen.shopapp.exceptions.PermissionDenyException;
@@ -17,6 +18,7 @@ import com.nguyenanhtuyen.shopapp.models.Role;
 import com.nguyenanhtuyen.shopapp.models.User;
 import com.nguyenanhtuyen.shopapp.repositories.RoleRepository;
 import com.nguyenanhtuyen.shopapp.repositories.UserRepository;
+import com.nguyenanhtuyen.shopapp.utils.MessageKeys;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +35,8 @@ public class UserService implements IUserService {
 	private final JwtTokenUtil jwtTokenUtil;
 	
 	private final AuthenticationManager authenticationManager;
+	
+	private final LocalizationUtil localizationUtil;
 
 	@Override
 	public User createUser(UserDTO userDTO) throws Exception {
@@ -41,13 +45,13 @@ public class UserService implements IUserService {
 		
 		//kiểm tra sdt đã tồn tại chưa?
 		if(userRepository.existsByPhoneNumber(phoneNumber)) {
-			throw new DataIntegrityViolationException("Phone number already exists");
+			throw new DataIntegrityViolationException(localizationUtil.getLocalizedMessage(MessageKeys.PHONE_NUMBER_ALREADY_EXISTS));
 		}
 		
 		Role role = roleRepository.findById(userDTO.getRoleId())
-				.orElseThrow(() -> new DataNotFoundException("Role not found"));
+				.orElseThrow(() -> new DataNotFoundException(localizationUtil.getLocalizedMessage(MessageKeys.ROLE_NOT_FOUND)));
 		if(role.getName().toUpperCase().equals(Role.ADMIN)) {
-			throw new PermissionDenyException("You cannot register an admin account");
+			throw new PermissionDenyException(localizationUtil.getLocalizedMessage(MessageKeys.CANNOT_REGISTER_ADMIN_ACCOUNT));
 		}
 		
 		//convert userDTO => user
@@ -80,7 +84,7 @@ public class UserService implements IUserService {
 		
 		Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
 		if(optionalUser.isEmpty()) {
-			throw new DataNotFoundException("Invalid phone number or password");
+			throw new DataNotFoundException(localizationUtil.getLocalizedMessage(MessageKeys.LOGIN_INVALID));
 		}
 		
 		User existingUser = optionalUser.get();
@@ -88,7 +92,7 @@ public class UserService implements IUserService {
 		// check password
 		if(existingUser.getFacebookAccountId() == 0 && existingUser.getGoogleAccountId() == 0) {
 			if(!passwordEncoder.matches(password, existingUser.getPassword())) {
-				throw new BadCredentialsException("Wrong phone number or password");
+				throw new BadCredentialsException(localizationUtil.getLocalizedMessage(MessageKeys.LOGIN_WRONG));
 			}
 		}
 		
