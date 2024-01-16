@@ -11,6 +11,8 @@ public class MessageKeys {
 	
 	public static final String LOGIN_WRONG = "user.login.login_wrong";
 	
+	public static final String LOGIN_ROLE_NOT_EXISTS = "user.login.login_role_not_exist";
+	
 	// register
 	public static final String PASSWORD_NOT_MATCH = "user.register.password_not_match";
 	

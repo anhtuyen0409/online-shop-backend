@@ -66,7 +66,7 @@ public class UserController {
 
 		// kiểm tra thông tin đăng nhập và sinh token
 		try {
-			String token = userService.login(userLoginDTO.getPhoneNumber(), userLoginDTO.getPassword());
+			String token = userService.login(userLoginDTO.getPhoneNumber(), userLoginDTO.getPassword(), userLoginDTO.getRoleId());
 			// trả về token trong response
 			return ResponseEntity.ok(LoginResponse.builder()
 					.message(localizationUtil.getLocalizedMessage(MessageKeys.LOGIN_SUCCESSFULLY))
