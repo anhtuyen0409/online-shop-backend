@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nguyenanhtuyen.shopapp.dtos.ProductDTO;
 import com.nguyenanhtuyen.shopapp.dtos.ProductImageDTO;
@@ -31,6 +32,7 @@ public class ProductService implements IProductService {
 	private final ProductImageRepository productImageRepository;
 
 	@Override
+	@Transactional
 	public Product createProduct(ProductDTO productDTO) throws Exception {
 
 		Category existingCategory = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(
@@ -55,12 +57,15 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
+	public Page<ProductResponse> getAllProducts(String keyword, Long categoryId, PageRequest pageRequest) {
 		// lấy danh sách sản phẩm theo trang (page) và giới hạn (limit)
-		return productRepository.findAll(pageRequest).map(ProductResponse::fromProduct);
+		Page<Product> productsPage;
+		productsPage = productRepository.searchProducts(keyword, categoryId, pageRequest);
+		return productsPage.map(ProductResponse::fromProduct);
 	}
 
 	@Override
+	@Transactional
 	public Product updateProduct(long id, ProductDTO productDTO) throws Exception {
 		
 		Product existingProduct = getProductById(id);
@@ -81,6 +86,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteProduct(long id) {
 		Optional<Product> optionalProduct = productRepository.findById(id);
 		optionalProduct.ifPresent(productRepository::delete);
@@ -92,6 +98,7 @@ public class ProductService implements IProductService {
 	}
 	
 	@Override
+	@Transactional
 	public ProductImage createProductImage(Long productId, ProductImageDTO productImageDTO) throws Exception {
 		
 		Product existingProduct = productRepository.findById(productId)

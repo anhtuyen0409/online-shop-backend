@@ -3,6 +3,7 @@ package com.nguyenanhtuyen.shopapp.services;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nguyenanhtuyen.shopapp.dtos.OrderDetailDTO;
 import com.nguyenanhtuyen.shopapp.exceptions.DataNotFoundException;
@@ -26,6 +27,7 @@ public class OrderDetailService implements IOrderDetailService {
 	private final ProductRepository productRepository;
 
 	@Override
+	@Transactional
 	public OrderDetail createOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception {
 		
 		// kiểm tra orderId có tồn tại không?
@@ -57,6 +59,7 @@ public class OrderDetailService implements IOrderDetailService {
 	}
 
 	@Override
+	@Transactional
 	public OrderDetail updateOrderDetail(Long id, OrderDetailDTO orderDetailDTO) throws Exception {
 		
 		// kiểm tra orderdetail có tồn tại không?
@@ -84,6 +87,7 @@ public class OrderDetailService implements IOrderDetailService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteOrderDetail(Long id) {
 		orderDetailRepository.deleteById(id);
 	}

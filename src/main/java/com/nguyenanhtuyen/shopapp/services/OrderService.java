@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nguyenanhtuyen.shopapp.dtos.OrderDTO;
 import com.nguyenanhtuyen.shopapp.exceptions.DataNotFoundException;
@@ -28,6 +29,7 @@ public class OrderService implements IOrderService {
 	private final ModelMapper modelMapper;
 
 	@Override
+	@Transactional
 	public Order createOrder(OrderDTO orderDTO) throws Exception {
 		
 		// kiểm tra userId có tồn tại không?
@@ -64,6 +66,7 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
+	@Transactional
 	public Order updateOrder(Long id, OrderDTO orderDTO) throws DataNotFoundException {
 		
 		Order order = orderRepository.findById(id)
@@ -83,6 +86,7 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteOrder(Long id) {
 		Order order = orderRepository.findById(id).orElse(null);
 		if(order != null) {

@@ -43,8 +43,8 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(requests -> {
 				requests
 					.requestMatchers(
-							String.format("%s/users/register", apiPrefix),
-							String.format("%s/users/login", apiPrefix)
+							String.format("%s/users/login", apiPrefix),
+							String.format("%s/users/register", apiPrefix)
 					)
 					.permitAll()
 					
@@ -68,6 +68,9 @@ public class WebSecurityConfig {
 					// products
 					.requestMatchers(HttpMethod.GET, 
 							String.format("%s/products/**", apiPrefix)).hasAnyRole(Role.USER, Role.ADMIN)
+					
+					.requestMatchers(HttpMethod.GET,
+							String.format("%s/products/images/**", apiPrefix)).permitAll()
 					
 					.requestMatchers(HttpMethod.POST, 
 							String.format("%s/products/**", apiPrefix)).hasRole(Role.ADMIN)

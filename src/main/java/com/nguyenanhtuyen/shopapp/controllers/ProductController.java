@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -58,11 +59,16 @@ public class ProductController {
 
 	// http://localhost:8088/api/v1/products?page=1&limit=10
 	@GetMapping("")
-	public ResponseEntity<ProductListResponse> getProducts(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+	public ResponseEntity<ProductListResponse> getProducts(
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "0", name = "category_id") Long categoryId,
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "10") int limit) {
 		
 		// tạo Pageable từ thông tin trang và giới hạn
-		PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createAt").descending());
-		Page<ProductResponse> productPage = productService.getAllProducts(pageRequest);
+		PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("id").ascending());
+		
+		Page<ProductResponse> productPage = productService.getAllProducts(keyword, categoryId, pageRequest);
 		
 		// lấy tổng số trang
 		int totalPages = productPage.getTotalPages();
@@ -158,6 +164,24 @@ public class ProductController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 		
+	}
+	
+	@GetMapping("/images/{imageName}")
+	public ResponseEntity<?> viewImage(@PathVariable String imageName) {
+		try {
+			Path imagePath = Paths.get("uploads/" + imageName);
+			UrlResource resource = new UrlResource(imagePath.toUri());
+			
+			if(resource.exists()) {
+				return ResponseEntity.ok()
+						.contentType(MediaType.IMAGE_JPEG)
+						.body(resource);
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	private String storeFile(MultipartFile file) throws IOException {
