@@ -1,6 +1,7 @@
 package com.nguyenanhtuyen.shopapp.dtos;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -55,5 +56,8 @@ public class OrderDTO {
 
 	@JsonProperty("payment_method")
 	private String paymentMethod;
+	
+	@JsonProperty("cart_items")
+	private List<CartItemDTO> cartItems;
 
 }

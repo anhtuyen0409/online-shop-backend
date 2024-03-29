@@ -1,5 +1,6 @@
 package com.nguyenanhtuyen.shopapp.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -51,9 +52,17 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public Product getProductById(long id) throws Exception {
-		return productRepository.findById(id)
-				.orElseThrow(() -> new DataNotFoundException("Cannot found product with id: " + id));
+	public Product getProductById(long productId) throws Exception {
+		Optional<Product> optionalProduct = productRepository.getDetailProduct(productId);
+		if(optionalProduct.isPresent()) {
+			return optionalProduct.get();
+		}
+		throw new DataNotFoundException("Cannot find product with id = " + productId);
+	}
+	
+	@Override
+	public List<Product> findProductsByIds(List<Long> productIds) {
+		return productRepository.findProductsByIds(productIds);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.nguyenanhtuyen.shopapp.services;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -24,5 +26,7 @@ public interface IProductService {
 	boolean existsByName(String name);
 	
 	ProductImage createProductImage(Long productId, ProductImageDTO productImageDTO) throws Exception;
+	
+	List<Product> findProductsByIds(List<Long> productIds);
 	
 }
