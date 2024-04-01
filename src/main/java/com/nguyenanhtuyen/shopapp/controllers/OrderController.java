@@ -18,6 +18,7 @@ import com.nguyenanhtuyen.shopapp.components.LocalizationUtil;
 import com.nguyenanhtuyen.shopapp.dtos.OrderDTO;
 import com.nguyenanhtuyen.shopapp.models.Order;
 import com.nguyenanhtuyen.shopapp.responses.OrderMessageResponse;
+import com.nguyenanhtuyen.shopapp.responses.OrderResponse;
 import com.nguyenanhtuyen.shopapp.services.IOrderService;
 import com.nguyenanhtuyen.shopapp.utils.MessageKeys;
 
@@ -64,7 +65,8 @@ public class OrderController {
 	public ResponseEntity<?> getOrder(@Valid @PathVariable("id") Long orderId) {
 		try {
 			Order existingOrder = orderService.getOrder(orderId);
-			return ResponseEntity.ok(existingOrder);
+			OrderResponse orderResponse = OrderResponse.fromOrder(existingOrder);
+			return ResponseEntity.ok(orderResponse);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
