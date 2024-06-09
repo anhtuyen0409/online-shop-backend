@@ -5,7 +5,7 @@ spring:
     url: jdbc:mysql://localhost:3306/shopapp?useSSL=false&serverTimezone=UTC
     driver-class-name: com.mysql.jdbc.Driver
     username: root
-    password: 
+    password:
   jpa:
     show-sql: true
     hibernate:
@@ -25,5 +25,5 @@ spring:
 api:
   prefix: api/v1
 jwt:
-  expiration: 2592000  #30 days = 30 * 24 * 60 * 60
-  secretKey: O+kbu+ZtoTXbhoLD7upgwpbMvlnWkW2Ac2Ie49mA/RE=
+  expiration: 2592000 #30 days = 30 * 24 * 60 * 60
+  secretKey:
